@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VFS Visa Checker</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+            VFS Visa Checker
+        </div>
+        <div class="status-indicator">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Bağlantı bekleniyor</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="card">
+                <h3 class="card-title">Giriş Bilgileri</h3>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="vfs@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" id="password" placeholder="••••••••">
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Randevu Ayarları</h3>
+                <div class="form-group">
+                    <label>Ülke</label>
+                    <select id="country">
+                        <option value="tur">Türkiye</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Misyon</label>
+                    <select id="mission">
+                        <option value="ita">İtalya</option>
+                        <option value="deu">Almanya</option>
+                        <option value="fra">Fransa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Merkez</label>
+                    <select id="center">
+                        <option value="IST">İstanbul</option>
+                        <option value="ANK">Ankara</option>
+                        <option value="IZM">İzmir</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Kontrol Aralığı (sn)</label>
+                    <input type="number" id="interval" value="30" min="10" max="300">
+                </div>
+            </div>
+
+            <div class="card">
+                <button class="btn btn-success" id="startBtn" onclick="startScan()">Taramayı Başlat</button>
+                <button class="btn btn-danger" id="stopBtn" onclick="stopScan()" style="display:none; margin-top:10px;">Durdur</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="checkCount">0</div>
+                    <div class="stat-label">Kontrol</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value success" id="foundCount">0</div>
+                    <div class="stat-label">Bulunan</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value warning" id="errorCount">0</div>
+                    <div class="stat-label">Hata</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="uptime">00:00</div>
+                    <div class="stat-label">Süre</div>
+                </div>
+            </div>
+
+            <div class="card log-panel">
+                <div class="log-header">
+                    <h3 class="card-title">Log</h3>
+                    <button class="btn btn-secondary" onclick="clearLogs()" style="width:auto;padding:0.5rem 1rem;">Temizle</button>
+                </div>
+                <div class="log-container" id="logContainer"></div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="otpModal">
+        <div class="modal">
+            <h3 class="modal-title">OTP Kodu Girin</h3>
+            <div class="otp-input">
+                <input type="text" maxlength="1" class="otp-digit">
+                <input type="text" maxlength="1" class="otp-digit">
+                <input type="text" maxlength="1" class="otp-digit">
+                <input type="text" maxlength="1" class="otp-digit">
+                <input type="text" maxlength="1" class="otp-digit">
+                <input type="text" maxlength="1" class="otp-digit">
+            </div>
+            <button class="btn btn-primary" onclick="submitOTP()">Doğrula</button>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="/static/app.js"></script>
+</body>
+</html>
